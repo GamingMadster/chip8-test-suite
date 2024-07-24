@@ -37,9 +37,17 @@
 }
 
 : test2X
+	v0 := 1
   i := image-ok
   sprite x2 y 4
+	
+	#test 0E
+	y += 5
+  drawop im0 imE
   return
+	i := image-no
+	
+	jump fail0E
 
 : main
   clear
@@ -111,15 +119,29 @@
   x2 := 27
   y := 1
   drawop im2 imX
+	
+	v0 := 0
   test2X
+	
+	if v0 == 0 then jump skip0E
 
-  #test 0E
-  y += 5
-  drawop im0 imE
+  #test 0E pass
   i := image-ok
   sprite x2 y 4
+	jump after0E
+	
+: skip0E
+	i := image-no
+	sprite x2 y 4
+	y += 5
+	drawop im0 imE
+	
+: fail0E
+	i := image-no
+	sprite x2 y 4
 
   #test 8xy0
+: after0E
   y += 5
   drawop im8 im0
   i := image-no
@@ -255,6 +277,14 @@
   if v0 != 1 then i := image-no
   if v1 != 3 then i := image-no
   if v2 != 7 then i := image-no
+	i := scratchpad
+  v6 := 65
+  bcd v6
+  load v2
+  i := image-ok
+  if v0 != 0 then i := image-no
+  if v1 != 6 then i := image-no
+  if v2 != 5 then i := image-no
   sprite x2 y 4
 
   #test Fx1E
@@ -416,5 +446,5 @@
 : version-0-0
   0x0a 0xae 0xa2 0x42
 : version-1-0
-  0x10 0x30 0x10 0xb8
+  0x38 0x08 0x30 0xB8
 
