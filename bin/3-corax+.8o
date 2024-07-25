@@ -139,9 +139,10 @@
 : fail0E
 	i := image-no
 	sprite x2 y 4
+	
+	: after0E
 
   #test 8xy0
-: after0E
   y += 5
   drawop im8 im0
   i := image-no
@@ -269,6 +270,8 @@
   #test Fx33
   y += 5
   drawop imF im3
+  
+  # >= 100
   i := scratchpad
   v6 := 137
   bcd v6
@@ -277,7 +280,9 @@
   if v0 != 1 then i := image-no
   if v1 != 3 then i := image-no
   if v2 != 7 then i := image-no
-	i := scratchpad
+  
+  # < 100
+  i := scratchpad
   v6 := 65
   bcd v6
   load v2
@@ -285,6 +290,16 @@
   if v0 != 0 then i := image-no
   if v1 != 6 then i := image-no
   if v2 != 5 then i := image-no
+  
+  # < 10
+  i := scratchpad
+  v6 := 4
+  bcd v6
+  load v2
+  i := image-ok
+  if v0 != 0 then i := image-no
+  if v1 != 0 then i := image-no
+  if v2 != 4 then i := image-no
   sprite x2 y 4
 
   #test Fx1E
@@ -446,5 +461,5 @@
 : version-0-0
   0x0a 0xae 0xa2 0x42
 : version-1-0
-  0x38 0x08 0x30 0xB8
+  0x30 0x08 0x30 0xb8
 
