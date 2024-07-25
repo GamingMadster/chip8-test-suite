@@ -45,6 +45,8 @@
 	y += 5
   drawop im0 imE
   return
+  
+  # no return? bad 00EE :)
 	i := image-no
 	
 	jump fail0E
@@ -121,8 +123,10 @@
   drawop im2 imX
 	
 	v0 := 0
+	# call subroutine, which sets v0 to 1, and displays a checkmark
   test2X
 	
+	# 2NNN fail, skips the 00EE test entirely as to not crash the interpreter.
 	if v0 == 0 then jump skip0E
 
   #test 0E pass
@@ -130,12 +134,14 @@
   sprite x2 y 4
 	jump after0E
 	
+	# interpreter ends up here when 2NNN isn't implemented.
 : skip0E
 	i := image-no
 	sprite x2 y 4
 	y += 5
 	drawop im0 imE
 	
+	# interpreter hasn't implemented 00EE, or 2NNN is not implemented.
 : fail0E
 	i := image-no
 	sprite x2 y 4
@@ -277,9 +283,9 @@
   bcd v6
   load v2
   i := image-ok
-  if v0 != 1 then i := image-no
-  if v1 != 3 then i := image-no
-  if v2 != 7 then i := image-no
+  if v0 != 1 begin i := image-no jump skipOtherFx33Tests
+  if v1 != 3 begin i := image-no jump skipOtherFx33Tests
+  if v2 != 7 begin i := image-no jump skipOtherFx33Tests
   
   # < 100
   i := scratchpad
@@ -287,9 +293,9 @@
   bcd v6
   load v2
   i := image-ok
-  if v0 != 0 then i := image-no
-  if v1 != 6 then i := image-no
-  if v2 != 5 then i := image-no
+  if v0 != 0 begin i := image-no jump skipOtherFx33Tests
+  if v1 != 6 begin i := image-no jump skipOtherFx33Tests
+  if v2 != 5 begin i := image-no jump skipOtherFx33Tests
   
   # < 10
   i := scratchpad
@@ -297,9 +303,11 @@
   bcd v6
   load v2
   i := image-ok
-  if v0 != 0 then i := image-no
-  if v1 != 0 then i := image-no
+  if v0 != 0 begin i := image-no jump skipOtherFx33Tests
+  if v1 != 0 begin i := image-no jump skipOtherFx33Tests
   if v2 != 4 then i := image-no
+  
+  : skipOtherFx33Tests
   sprite x2 y 4
 
   #test Fx1E
